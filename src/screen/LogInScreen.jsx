@@ -21,8 +21,13 @@ const LoginScreen = () => {
   const handleGoBack = () => {
     navigation.goBack();
   };
+
   const handleSignup = () => {
     navigation.navigate("SIGNUP");
+  };
+
+  const handleLogin = () => {
+    navigation.navigate("DASHBOARD");
   };
 
   return (
@@ -69,17 +74,9 @@ const LoginScreen = () => {
         <TouchableOpacity>
           <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.loginButtonWrapper}>
+        <TouchableOpacity style={styles.loginButtonWrapper} onPress={handleLogin}>
           <Text style={styles.loginText}>Login</Text>
         </TouchableOpacity>
-        {/* <Text style={styles.continueText}>or continue with</Text>
-        <TouchableOpacity style={styles.googleButtonContainer}>
-          <Image
-            source={require("../assets/google.png")}
-            style={styles.googleImage}
-          />
-          <Text style={styles.googleText}>Google</Text>
-        </TouchableOpacity> */}
         <View style={styles.footerContainer}>
           <Text style={styles.accountText}>Don’t have an account?</Text>
           <TouchableOpacity onPress={handleSignup}>
@@ -150,31 +147,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.SemiBold,
     textAlign: "center",
     padding: 10,
-  },
-  continueText: {
-    textAlign: "center",
-    marginVertical: 20,
-    fontSize: 14,
-    fontFamily: fonts.Regular,
-    color: colors.primary,
-  },
-  googleButtonContainer: {
-    flexDirection: "row",
-    borderWidth: 2,
-    borderColor: colors.primary,
-    borderRadius: 100,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 10,
-    gap: 10,
-  },
-  googleImage: {
-    height: 20,
-    width: 20,
-  },
-  googleText: {
-    fontSize: 20,
-    fontFamily: fonts.SemiBold,
   },
   footerContainer: {
     flexDirection: "row",
