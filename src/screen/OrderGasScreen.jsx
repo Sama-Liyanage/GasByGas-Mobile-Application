@@ -104,21 +104,41 @@ const OrderGasScreen = () => {
       </View>
 
       {/* Gas Type Selection (Radio Buttons) */}
-      {/* <View style={styles.inputContainer}>
+      <View style={styles.inputContainer}>
         <Text style={styles.labelText}>Select Gas Type</Text>
-        <RadioButton
-          value="Domestic"
-          status={gasType === 'Domestic' ? 'checked' : 'unchecked'}
-          onPress={() => setGasType('Domestic')}
-        />
-        <Text style={styles.radioButtonText}>Domestic Cylinder</Text>
-        <RadioButton
-          value="Industrial"
-          status={gasType === 'Industrial' ? 'checked' : 'unchecked'}
-          onPress={() => setGasType('Industrial')}
-        />
-        <Text style={styles.radioButtonText}>Industrial Cylinder</Text>
-      </View> */}
+
+        {/* Custom Radio Button for Domestic */}
+        <TouchableOpacity
+          style={[
+            styles.radioButtonContainer,
+            gasType === 'Domestic' && styles.selectedRadioButton,
+          ]}
+          onPress={() => setGasType('Domestic')}>
+          <View
+            style={[
+              styles.radioCircle,
+              gasType === 'Domestic' && styles.selectedCircle,
+            ]}
+          />
+          <Text style={styles.radioButtonText}>Domestic Cylinder</Text>
+        </TouchableOpacity>
+
+        {/* Custom Radio Button for Industrial */}
+        <TouchableOpacity
+          style={[
+            styles.radioButtonContainer,
+            gasType === 'Industrial' && styles.selectedRadioButton,
+          ]}
+          onPress={() => setGasType('Industrial')}>
+          <View
+            style={[
+              styles.radioCircle,
+              gasType === 'Industrial' && styles.selectedCircle,
+            ]}
+          />
+          <Text style={styles.radioButtonText}>Industrial Cylinder</Text>
+        </TouchableOpacity>
+      </View>
 
       {/* Quantity Input */}
       <View style={styles.inputContainer}>
@@ -152,13 +172,17 @@ const OrderGasScreen = () => {
         <TouchableOpacity
           style={styles.requestButtonWrapper}
           onPress={handleRequestNow}>
-          <Text style={styles.requestButtonText}>Request Now</Text>
+          <Text
+            onPress={handleGoToTokenStatus}
+            style={styles.requestButtonText}>
+            Request Now
+          </Text>
         </TouchableOpacity>
       )}
 
-      <TouchableOpacity onPress={handleGoToTokenStatus}>
+      {/* <TouchableOpacity>
         <Text>View Token Status</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
@@ -243,5 +267,39 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 18,
     fontFamily: fonts.SemiBold,
+  },
+  //
+  inputContainer: {
+    marginBottom: 20,
+  },
+  labelText: {
+    fontSize: 16,
+    fontFamily: fonts.Regular,
+    color: colors.secondary,
+    marginBottom: 5,
+  },
+  radioButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  radioCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: colors.secondary,
+    marginRight: 10,
+  },
+  selectedCircle: {
+    backgroundColor: colors.primary, // Change color when selected
+  },
+  radioButtonText: {
+    fontSize: 16,
+    fontFamily: fonts.Regular,
+    color: colors.primary,
+  },
+  selectedRadioButton: {
+    backgroundColor: colors.lightGray, // Optional: Change background when selected
   },
 });

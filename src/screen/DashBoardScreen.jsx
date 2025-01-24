@@ -42,7 +42,7 @@ const DashboardScreen = () => {
           title="Account Details"
           icon="account-circle"
           color={colors.tertiary}
-          onPress={() => navigation.navigate('ACCOUNT_DETAILS')}
+          onPress={() => navigation.navigate('PROFILE')}
         />
       </View>
     </View>

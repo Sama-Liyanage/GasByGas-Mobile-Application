@@ -9,6 +9,8 @@ import DashBoardScreen from './src/screen/DashBoardScreen';
 import OrderGasScreen from './src/screen/OrderGasScreen';
 import OrderHistoryScreen from './src/screen/OrderHistoryScreen';
 import TokenStatusScreen from './src/screen/TokenStatusScreen';
+import ProfileScreen from './src/screen/ProfileScreen';
+import DeliveryDetailsScreen from './src/screen/DeliveryDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +28,8 @@ const App = () => {
         <Stack.Screen name={'ORDER_GAS'} component={OrderGasScreen} />
         <Stack.Screen name={'ORDER_HISTORY'} component={OrderHistoryScreen} />
         <Stack.Screen name={'TokenStatusScreen'} component={TokenStatusScreen} />
+        <Stack.Screen name={'PROFILE'} component={ProfileScreen} />
+        <Stack.Screen name={'DELIVERY_DETAILS'} component={DeliveryDetailsScreen} />
 
 
       </Stack.Navigator>

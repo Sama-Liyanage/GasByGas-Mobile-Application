@@ -27,13 +27,9 @@ import {
     };
   
     return (
-      <View style={styles.container}>
+        <View style={styles.container}>
         <TouchableOpacity style={styles.backButtonWrapper} onPress={handleGoBack}>
-          <Ionicons
-            name={"arrow-back-outline"}
-            color={colors.primary}
-            size={25}
-          />
+          <Ionicons name={"arrow-back-outline"} color={colors.primary} size={25} />
         </TouchableOpacity>
         <View style={styles.textContainer}>
           <Text style={styles.headingText}>Let's get</Text>
@@ -41,6 +37,18 @@ import {
         </View>
         {/* form  */}
         <View style={styles.formContainer}>
+          {/* Username input */}
+          <View style={styles.inputContainer}>
+            <Ionicons name={"person-outline"} size={30} color={colors.secondary} />
+            <TextInput
+              style={styles.textInput}
+              placeholder="Enter your username"
+              placeholderTextColor={colors.secondary}
+              keyboardType="default"
+            />
+          </View>
+      
+          {/* Email input */}
           <View style={styles.inputContainer}>
             <Ionicons name={"mail-outline"} size={30} color={colors.secondary} />
             <TextInput
@@ -50,6 +58,8 @@ import {
               keyboardType="email-address"
             />
           </View>
+      
+          {/* Password input */}
           <View style={styles.inputContainer}>
             <SimpleLineIcons name={"lock"} size={30} color={colors.secondary} />
             <TextInput
@@ -66,25 +76,15 @@ import {
               <SimpleLineIcons name={"eye"} size={20} color={colors.secondary} />
             </TouchableOpacity>
           </View>
-          <View style={styles.inputContainer}>
-            <SimpleLineIcons
-              name={"screen-smartphone"}
-              size={30}
-              color={colors.secondary}
-            />
-            <TextInput
-              style={styles.textInput}
-              placeholder="Enter your phone no"
-              placeholderTextColor={colors.secondary}
-              secureTextEntry={secureEntery}
-              keyboardType="phone-pad"
-            />
-          </View>
-  
+      
+         
+      
+          {/* Signup button */}
           <TouchableOpacity style={styles.loginButtonWrapper}>
             <Text style={styles.loginText}>Sign up</Text>
           </TouchableOpacity>
           <Text style={styles.continueText}>or continue with</Text>
+          {/* Google button */}
           {/* <TouchableOpacity style={styles.googleButtonContainer}>
             <Image
               source={require("../assets/google.png")}
@@ -92,14 +92,17 @@ import {
             />
             <Text style={styles.googleText}>Google</Text>
           </TouchableOpacity> */}
+          
+          {/* Footer with login link */}
           <View style={styles.footerContainer}>
-            <Text style={styles.accountText}>Already have an account!</Text>
+            <Text style={styles.accountText}>Already have an account?</Text>
             <TouchableOpacity onPress={handleLogin}>
               <Text style={styles.signupText}>Login</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
+      
     );
   };
   
