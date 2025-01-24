@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
+  RadioButton,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {colors} from '../utils/color';
@@ -14,23 +16,59 @@ import {Picker} from '@react-native-picker/picker';
 
 const OrderGasScreen = () => {
   const navigation = useNavigation();
-  const [typeOrWeight, setTypeOrWeight] = useState('Domestic');
+  const [selectedOutlet, setSelectedOutlet] = useState('');
+  const [gasType, setGasType] = useState('Domestic');
   const [quantity, setQuantity] = useState(1);
-  const [address, setAddress] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [deliveryPeriod, setDeliveryPeriod] = useState('');
+  const [outlets, setOutlets] = useState([
+    // Example outlet data based on user location or district
+    {id: 1, name: 'Outlet A', district: 'District 1'},
+    {id: 2, name: 'Outlet B', district: 'District 2'},
+    {id: 3, name: 'Outlet C', district: 'District 3'},
+  ]);
+
+  useEffect(() => {
+    // Simulating delivery period based on selected outlet
+    if (selectedOutlet) {
+      setDeliveryPeriod('Pickup in 3–5 days');
+      setErrorMessage('');
+    } else {
+      setDeliveryPeriod('');
+      setErrorMessage('No delivery scheduled for this outlet currently.');
+    }
+  }, [selectedOutlet]);
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
-  const handleOrderSubmit = () => {
-    if (!address.trim()) {
-      alert('Please enter your delivery address.');
+  const handleRequestNow = async () => {
+    if (!selectedOutlet || !quantity || quantity <= 0) {
+      setErrorMessage('Please select an outlet and enter a valid quantity.');
       return;
     }
-    alert(
-      `Order placed successfully!\n\nDetails:\nType or Weight: ${typeOrWeight}\nQuantity: ${quantity}\nAddress: ${address}`,
-    );
-    // Here you can integrate the API call to submit the order
+    setLoading(true);
+
+    try {
+      // Simulating API request with timeout
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      alert(
+        `Request placed successfully!\n\nDetails:\nOutlet: ${selectedOutlet}\nGas Type: ${gasType}\nQuantity: ${quantity}\nExpected Delivery: ${deliveryPeriod}`,
+      );
+    } catch (error) {
+      setErrorMessage(
+        'There was an error processing your request. Please try again.',
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoToTokenStatus = () => {
+    navigation.navigate('TokenStatusScreen'); // Navigate to the Token Status Screen
   };
 
   return (
@@ -45,24 +83,46 @@ const OrderGasScreen = () => {
       </TouchableOpacity>
 
       {/* Screen Header */}
-      <Text style={styles.headerText}>Order Gas Cylinder</Text>
+      <Text style={styles.headerText}>Request Gas Cylinder</Text>
 
-      {/* Type or Weight Picker */}
-      <View style={styles.pickerContainer}>
-        <Text style={styles.labelText}>Select Type or Weight</Text>
+      {/* Outlet Dropdown */}
+      <View style={styles.inputContainer}>
+        <Text style={styles.labelText}>Select Gas Outlet</Text>
         <Picker
-          selectedValue={typeOrWeight}
+          selectedValue={selectedOutlet}
           style={styles.picker}
-          onValueChange={itemValue => setTypeOrWeight(itemValue)}>
-          <Picker.Item label="Domestic Cylinder (12.5kg)" value="Domestic" />
-          <Picker.Item label="Commercial Cylinder (37.5kg)" value="Commercial" />
-          <Picker.Item label="Industrial Cylinder (50kg)" value="Industrial" />
+          onValueChange={itemValue => setSelectedOutlet(itemValue)}>
+          <Picker.Item label="Select an outlet" value="" />
+          {outlets.map(outlet => (
+            <Picker.Item
+              key={outlet.id}
+              label={outlet.name}
+              value={outlet.name}
+            />
+          ))}
         </Picker>
       </View>
 
+      {/* Gas Type Selection (Radio Buttons) */}
+      {/* <View style={styles.inputContainer}>
+        <Text style={styles.labelText}>Select Gas Type</Text>
+        <RadioButton
+          value="Domestic"
+          status={gasType === 'Domestic' ? 'checked' : 'unchecked'}
+          onPress={() => setGasType('Domestic')}
+        />
+        <Text style={styles.radioButtonText}>Domestic Cylinder</Text>
+        <RadioButton
+          value="Industrial"
+          status={gasType === 'Industrial' ? 'checked' : 'unchecked'}
+          onPress={() => setGasType('Industrial')}
+        />
+        <Text style={styles.radioButtonText}>Industrial Cylinder</Text>
+      </View> */}
+
       {/* Quantity Input */}
       <View style={styles.inputContainer}>
-        <Text style={styles.labelText}>Quantity</Text>
+        <Text style={styles.labelText}>Number of Cylinders</Text>
         <TextInput
           style={styles.textInput}
           keyboardType="numeric"
@@ -71,24 +131,33 @@ const OrderGasScreen = () => {
         />
       </View>
 
-      {/* Delivery Address Input */}
-      <View style={styles.inputContainer}>
-        <Text style={styles.labelText}>Delivery Address</Text>
-        <TextInput
-          style={[styles.textInput, styles.textArea]}
-          placeholder="Enter your address"
-          placeholderTextColor={colors.secondary}
-          multiline
-          value={address}
-          onChangeText={setAddress}
-        />
-      </View>
+      {/* Delivery Period */}
+      {deliveryPeriod ? (
+        <View style={styles.deliveryPeriodContainer}>
+          <Text style={styles.deliveryPeriodText}>{deliveryPeriod}</Text>
+        </View>
+      ) : null}
 
-      {/* Submit Button */}
-      <TouchableOpacity
-        style={styles.orderButtonWrapper}
-        onPress={handleOrderSubmit}>
-        <Text style={styles.orderButtonText}>Place Order</Text>
+      {/* Error Message */}
+      {errorMessage ? (
+        <View style={styles.errorMessageContainer}>
+          <Text style={styles.errorMessageText}>{errorMessage}</Text>
+        </View>
+      ) : null}
+
+      {/* Request Now Button */}
+      {loading ? (
+        <ActivityIndicator size="large" color={colors.primary} />
+      ) : (
+        <TouchableOpacity
+          style={styles.requestButtonWrapper}
+          onPress={handleRequestNow}>
+          <Text style={styles.requestButtonText}>Request Now</Text>
+        </TouchableOpacity>
+      )}
+
+      <TouchableOpacity onPress={handleGoToTokenStatus}>
+        <Text>View Token Status</Text>
       </TouchableOpacity>
     </View>
   );
@@ -117,7 +186,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     textAlign: 'center',
   },
-  pickerContainer: {
+  inputContainer: {
     marginBottom: 20,
   },
   labelText: {
@@ -132,9 +201,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: colors.gray,
   },
-  inputContainer: {
-    marginBottom: 20,
-  },
   textInput: {
     borderWidth: 1,
     borderColor: colors.secondary,
@@ -144,18 +210,36 @@ const styles = StyleSheet.create({
     fontFamily: fonts.Regular,
     color: colors.primary,
   },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
+  deliveryPeriodContainer: {
+    marginBottom: 20,
   },
-  orderButtonWrapper: {
+  deliveryPeriodText: {
+    fontSize: 16,
+    fontFamily: fonts.Regular,
+    color: colors.success,
+  },
+  errorMessageContainer: {
+    marginBottom: 20,
+  },
+  errorMessageText: {
+    fontSize: 16,
+    fontFamily: fonts.Regular,
+    color: colors.danger,
+  },
+  radioButtonText: {
+    fontSize: 16,
+    fontFamily: fonts.Regular,
+    color: colors.primary,
+    marginBottom: 10,
+  },
+  requestButtonWrapper: {
     backgroundColor: colors.primary,
     borderRadius: 100,
     padding: 15,
     marginTop: 20,
     alignItems: 'center',
   },
-  orderButtonText: {
+  requestButtonText: {
     color: colors.white,
     fontSize: 18,
     fontFamily: fonts.SemiBold,
