@@ -17,12 +17,11 @@ const HomeScreen = () => {
   };
   return (
     <View style={styles.container}>
-      <Image source={require('../assets/sample.png')} style={styles.logo} />
       <Image
         source={require('../assets/banner.png')}
         style={styles.bannerImage}
       />
-      <Text style={styles.title}>Lorem ipsum dolor.</Text>
+      <Text style={styles.title}>GasByGas</Text>
       <Text style={styles.subTitle}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore .blaaaa black ship
