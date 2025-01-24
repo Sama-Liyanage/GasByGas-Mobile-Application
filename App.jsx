@@ -8,6 +8,7 @@ import SignUpScreen from './src/screen/SignUpScreen';
 import DashBoardScreen from './src/screen/DashBoardScreen';
 import OrderGasScreen from './src/screen/OrderGasScreen';
 import OrderHistoryScreen from './src/screen/OrderHistoryScreen';
+import TokenStatusScreen from './src/screen/TokenStatusScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ const App = () => {
         <Stack.Screen name="DASHBOARD" component={DashBoardScreen} />
         <Stack.Screen name={'ORDER_GAS'} component={OrderGasScreen} />
         <Stack.Screen name={'ORDER_HISTORY'} component={OrderHistoryScreen} />
+        <Stack.Screen name={'TokenStatusScreen'} component={TokenStatusScreen} />
 
 
       </Stack.Navigator>
