@@ -21,6 +21,7 @@ const App = () => {
         <Stack.Screen name={'SIGNUP'} component={SignUpScreen} />
         <Stack.Screen name="DASHBOARD" component={DashBoardScreen} />
 
+
       </Stack.Navigator>
     </NavigationContainer>
   );
