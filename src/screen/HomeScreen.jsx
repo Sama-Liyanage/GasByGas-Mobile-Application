@@ -2,8 +2,7 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {colors} from '../utils/color';
 import {fonts} from '../utils/font';
-import { useNavigation } from '@react-navigation/native';
-
+import {useNavigation} from '@react-navigation/native';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -23,21 +22,19 @@ const HomeScreen = () => {
       />
       <Text style={styles.title}>GasByGas</Text>
       <Text style={styles.subTitle}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore .blaaaa black ship
+        Your trusted solution for island-wide LP gas distribution. Request and
+        track gas cylinders conveniently, anytime, anywhere.
       </Text>
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.loginButtonWrapper, {backgroundColor: colors.primary}]}
-            onPress={handleLogin}
-        >
+          onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.loginButtonWrapper]}
-            onPress={handleSignup}
-        >
+          onPress={handleSignup}>
           <Text style={styles.signupButtonText}>Sign-up</Text>
         </TouchableOpacity>
       </View>

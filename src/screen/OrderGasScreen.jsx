@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  RadioButton,
+  Image,
+  FlatList,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {colors} from '../utils/color';
@@ -17,60 +18,68 @@ import {Picker} from '@react-native-picker/picker';
 const OrderGasScreen = () => {
   const navigation = useNavigation();
   const [selectedOutlet, setSelectedOutlet] = useState('');
-  const [gasType, setGasType] = useState('Domestic');
+  const [selectedGasType, setSelectedGasType] = useState(null);
   const [quantity, setQuantity] = useState(1);
+  const [includeRefill, setIncludeRefill] = useState(false);
+  const [needNewCylinder, setNeedNewCylinder] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [deliveryPeriod, setDeliveryPeriod] = useState('');
-  const [outlets, setOutlets] = useState([
-    // Example outlet data based on user location or district
+
+  const outlets = [
     {id: 1, name: 'Outlet A', district: 'District 1'},
     {id: 2, name: 'Outlet B', district: 'District 2'},
     {id: 3, name: 'Outlet C', district: 'District 3'},
-  ]);
+  ];
 
-  useEffect(() => {
-    // Simulating delivery period based on selected outlet
-    if (selectedOutlet) {
-      setDeliveryPeriod('Pickup in 3–5 days');
-      setErrorMessage('');
-    } else {
-      setDeliveryPeriod('');
-      setErrorMessage('No delivery scheduled for this outlet currently.');
-    }
-  }, [selectedOutlet]);
+  const gasTypes = [
+    {id: 1, weight: '2.3kg', price: 694, image: require('../assets/gas_1.png')},
+    {id: 2, weight: '5kg', price: 1482, image: require('../assets/gas_2.png')},
+    {id: 3, weight: '12.5kg', price: 3690, image: require('../assets/gas_3.png')},
+  ];
+
+  const cylinderCost = 2500; // Example cost for a new cylinder
+
+  const calculateTotalCost = () => {
+    if (!selectedGasType) return 0;
+    const gasCost = selectedGasType.price * quantity;
+    const refillTotal = includeRefill ? gasCost : 0; // Weight-based refill calculation
+    const cylinderTotal = needNewCylinder ? cylinderCost * quantity : 0;
+    return refillTotal + cylinderTotal;
+  };
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
-  const handleRequestNow = async () => {
-    if (!selectedOutlet || !quantity || quantity <= 0) {
-      setErrorMessage('Please select an outlet and enter a valid quantity.');
+  const handleCheckout = () => {
+    if (!selectedOutlet || !selectedGasType || quantity <= 0) {
+      setErrorMessage('Please complete all fields.');
       return;
     }
     setLoading(true);
-
-    try {
-      // Simulating API request with timeout
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      alert(
-        `Request placed successfully!\n\nDetails:\nOutlet: ${selectedOutlet}\nGas Type: ${gasType}\nQuantity: ${quantity}\nExpected Delivery: ${deliveryPeriod}`,
-      );
-    } catch (error) {
-      setErrorMessage(
-        'There was an error processing your request. Please try again.',
-      );
-    } finally {
+  
+    setTimeout(() => {
       setLoading(false);
-    }
+  
+      // Navigate to the Checkout screen with order details
+      navigation.navigate('CHECK_OUT', {
+        cartItem: {
+          name: selectedGasType.weight,  // Send gas type as the product name
+          price: selectedGasType.price,   // Send the price for the selected gas type
+          quantity,
+        },
+        outlet: selectedOutlet,
+        gasType: selectedGasType.weight,
+        quantity,
+        includeRefill,
+        needNewCylinder,
+        totalCost: calculateTotalCost(),
+        deliveryPeriod,
+      });
+    }, 2000);
   };
-
-  const handleGoToTokenStatus = () => {
-    navigation.navigate('TokenStatusScreen'); // Navigate to the Token Status Screen
-  };
-
+  
   return (
     <View style={styles.container}>
       {/* Back Button */}
@@ -103,41 +112,28 @@ const OrderGasScreen = () => {
         </Picker>
       </View>
 
-      {/* Gas Type Selection (Radio Buttons) */}
+      {/* Gas Type Selection */}
       <View style={styles.inputContainer}>
         <Text style={styles.labelText}>Select Gas Type</Text>
-
-        {/* Custom Radio Button for Domestic */}
-        <TouchableOpacity
-          style={[
-            styles.radioButtonContainer,
-            gasType === 'Domestic' && styles.selectedRadioButton,
-          ]}
-          onPress={() => setGasType('Domestic')}>
-          <View
-            style={[
-              styles.radioCircle,
-              gasType === 'Domestic' && styles.selectedCircle,
-            ]}
-          />
-          <Text style={styles.radioButtonText}>Domestic Cylinder</Text>
-        </TouchableOpacity>
-
-        {/* Custom Radio Button for Industrial */}
-        <TouchableOpacity
-          style={[
-            styles.radioButtonContainer,
-            gasType === 'Industrial' && styles.selectedRadioButton,
-          ]}
-          onPress={() => setGasType('Industrial')}>
-          <View
-            style={[
-              styles.radioCircle,
-              gasType === 'Industrial' && styles.selectedCircle,
-            ]}
-          />
-          <Text style={styles.radioButtonText}>Industrial Cylinder</Text>
-        </TouchableOpacity>
+        <FlatList
+          horizontal
+          data={gasTypes}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              style={[
+                styles.gasTypeContainer,
+                selectedGasType?.id === item.id && styles.selectedGasType,
+              ]}
+              onPress={() => setSelectedGasType(item)}>
+              <Image source={item.image} style={styles.gasImage} />
+              <Text style={styles.gasTypeText}>
+                {item.weight} - Rs. {item.price}
+              </Text>
+            </TouchableOpacity>
+          )}
+          showsHorizontalScrollIndicator={false}
+        />
       </View>
 
       {/* Quantity Input */}
@@ -151,12 +147,44 @@ const OrderGasScreen = () => {
         />
       </View>
 
-      {/* Delivery Period */}
-      {deliveryPeriod ? (
-        <View style={styles.deliveryPeriodContainer}>
-          <Text style={styles.deliveryPeriodText}>{deliveryPeriod}</Text>
-        </View>
-      ) : null}
+      {/* Refill Toggle */}
+      <View style={styles.inputContainer}>
+        <TouchableOpacity
+          style={styles.refillToggle}
+          onPress={() => setIncludeRefill(!includeRefill)}>
+          <Ionicons
+            name={includeRefill ? 'checkbox' : 'square-outline'}
+            size={24}
+            color={colors.primary}
+          />
+          <Text style={styles.refillText}>
+            Include Cylinder Refill (Weight-based pricing)
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* New Cylinder Toggle */}
+      <View style={styles.inputContainer}>
+        <TouchableOpacity
+          style={styles.refillToggle}
+          onPress={() => setNeedNewCylinder(!needNewCylinder)}>
+          <Ionicons
+            name={needNewCylinder ? 'checkbox' : 'square-outline'}
+            size={24}
+            color={colors.primary}
+          />
+          <Text style={styles.refillText}>
+            Need New Cylinder (+Rs. {cylinderCost}/cylinder)
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Total Cost Display */}
+      <View style={styles.totalCostContainer}>
+        <Text style={styles.totalCostText}>
+          Total Cost: Rs. {calculateTotalCost()}
+        </Text>
+      </View>
 
       {/* Error Message */}
       {errorMessage ? (
@@ -170,19 +198,11 @@ const OrderGasScreen = () => {
         <ActivityIndicator size="large" color={colors.primary} />
       ) : (
         <TouchableOpacity
-          style={styles.requestButtonWrapper}
-          onPress={handleRequestNow}>
-          <Text
-            onPress={handleGoToTokenStatus}
-            style={styles.requestButtonText}>
-            Request Now
-          </Text>
+          style={styles.checkoutButton}
+          onPress={handleCheckout}>
+          <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
         </TouchableOpacity>
       )}
-
-      {/* <TouchableOpacity>
-        <Text>View Token Status</Text>
-      </TouchableOpacity> */}
     </View>
   );
 };
@@ -225,6 +245,27 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: colors.gray,
   },
+  gasTypeContainer: {
+    marginRight: 15,
+    alignItems: 'center',
+  },
+  selectedGasType: {
+    borderWidth: 2,
+    borderColor: colors.primary,
+    borderRadius: 8,
+    padding: 5,
+  },
+  gasImage: {
+    width: 100,
+    height: 100,
+    resizeMode: 'contain',
+  },
+  gasTypeText: {
+    marginTop: 5,
+    fontSize: 14,
+    fontFamily: fonts.Regular,
+    color: colors.primary,
+  },
   textInput: {
     borderWidth: 1,
     borderColor: colors.secondary,
@@ -234,13 +275,25 @@ const styles = StyleSheet.create({
     fontFamily: fonts.Regular,
     color: colors.primary,
   },
-  deliveryPeriodContainer: {
-    marginBottom: 20,
+  refillToggle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 10,
   },
-  deliveryPeriodText: {
+  refillText: {
+    marginLeft: 10,
     fontSize: 16,
     fontFamily: fonts.Regular,
-    color: colors.success,
+    color: colors.primary,
+  },
+  totalCostContainer: {
+    marginVertical: 20,
+    alignItems: 'center',
+  },
+  totalCostText: {
+    fontSize: 18,
+    fontFamily: fonts.Bold,
+    color: colors.primary,
   },
   errorMessageContainer: {
     marginBottom: 20,
@@ -250,56 +303,15 @@ const styles = StyleSheet.create({
     fontFamily: fonts.Regular,
     color: colors.danger,
   },
-  radioButtonText: {
-    fontSize: 16,
-    fontFamily: fonts.Regular,
-    color: colors.primary,
-    marginBottom: 10,
-  },
-  requestButtonWrapper: {
-    backgroundColor: colors.primary,
-    borderRadius: 100,
+  checkoutButton: {
+    backgroundColor: colors.success,
     padding: 15,
-    marginTop: 20,
+    borderRadius: 8,
     alignItems: 'center',
   },
-  requestButtonText: {
+  checkoutButtonText: {
     color: colors.white,
-    fontSize: 18,
-    fontFamily: fonts.SemiBold,
-  },
-  //
-  inputContainer: {
-    marginBottom: 20,
-  },
-  labelText: {
     fontSize: 16,
-    fontFamily: fonts.Regular,
-    color: colors.secondary,
-    marginBottom: 5,
-  },
-  radioButtonContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  radioCircle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: colors.secondary,
-    marginRight: 10,
-  },
-  selectedCircle: {
-    backgroundColor: colors.primary, // Change color when selected
-  },
-  radioButtonText: {
-    fontSize: 16,
-    fontFamily: fonts.Regular,
-    color: colors.primary,
-  },
-  selectedRadioButton: {
-    backgroundColor: colors.lightGray, // Optional: Change background when selected
+    fontFamily: fonts.Bold,
   },
 });

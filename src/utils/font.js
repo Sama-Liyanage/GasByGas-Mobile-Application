@@ -1,5 +1,4 @@
 // font.js
-
 export const fonts = {
   Bold: 'Poppins-Bold',
   Light: 'Poppins-Light',

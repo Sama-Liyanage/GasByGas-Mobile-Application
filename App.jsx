@@ -8,9 +8,12 @@ import SignUpScreen from './src/screen/SignUpScreen';
 import DashBoardScreen from './src/screen/DashBoardScreen';
 import OrderGasScreen from './src/screen/OrderGasScreen';
 import OrderHistoryScreen from './src/screen/OrderHistoryScreen';
-import TokenStatusScreen from './src/screen/TokenStatusScreen';
 import ProfileScreen from './src/screen/ProfileScreen';
 import DeliveryDetailsScreen from './src/screen/DeliveryDetailsScreen';
+import RescheduleOrderScreen from './src/screen/RescheduleOrderScreen';
+import CheckOutScreen from './src/screen/CheckOutScreen';
+import TokenDetailsScreen from './src/screen/TokenDetailsScreen';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -26,12 +29,13 @@ const App = () => {
         <Stack.Screen name={'SIGNUP'} component={SignUpScreen} />
         <Stack.Screen name="DASHBOARD" component={DashBoardScreen} />
         <Stack.Screen name={'ORDER_GAS'} component={OrderGasScreen} />
-        <Stack.Screen name={'ORDER_HISTORY'} component={OrderHistoryScreen} />
-        <Stack.Screen name={'TokenStatusScreen'} component={TokenStatusScreen} />
+        <Stack.Screen name={'CHECK_OUT'} component={CheckOutScreen} />
+        <Stack.Screen name={'TOKEN-DETAILS'} component={TokenDetailsScreen} />
+
+        <Stack.Screen name={'ORDER_HISTORY'} component={OrderHistoryScreen} />     
         <Stack.Screen name={'PROFILE'} component={ProfileScreen} />
-        <Stack.Screen name={'DELIVERY_DETAILS'} component={DeliveryDetailsScreen} />
-
-
+     
+     
       </Stack.Navigator>
     </NavigationContainer>
   );
