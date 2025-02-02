@@ -9,8 +9,6 @@ import DashBoardScreen from './src/screen/DashBoardScreen';
 import OrderGasScreen from './src/screen/OrderGasScreen';
 import OrderHistoryScreen from './src/screen/OrderHistoryScreen';
 import ProfileScreen from './src/screen/ProfileScreen';
-import DeliveryDetailsScreen from './src/screen/DeliveryDetailsScreen';
-import RescheduleOrderScreen from './src/screen/RescheduleOrderScreen';
 import CheckOutScreen from './src/screen/CheckOutScreen';
 import TokenDetailsScreen from './src/screen/TokenDetailsScreen';
 

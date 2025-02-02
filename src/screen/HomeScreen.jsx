@@ -17,8 +17,9 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../assets/banner.png')}
+        source={require('../assets/LPG.png')}
         style={styles.bannerImage}
+        resizeMode="contain" 
       />
       <Text style={styles.title}>GasByGas</Text>
       <Text style={styles.subTitle}>
@@ -58,8 +59,8 @@ const styles = StyleSheet.create({
   },
   bannerImage: {
     marginVertical: 20,
-    height: 300,
-    width: 500,
+    height: 200,
+    width: 300,
   },
   title: {
     fontSize: 40,

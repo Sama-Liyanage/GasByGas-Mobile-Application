@@ -35,7 +35,7 @@ const CheckOutScreen = ({route}) => {
   const [notes, setNotes] = useState('');
 
   const handlePlaceOrder = () => {
-    const {firstName, lastName, address, city, zipCode, phone, email} =
+    const {firstName, lastName, address, city, phone, email} =
       billingDetails;
 
     if (
@@ -43,7 +43,6 @@ const CheckOutScreen = ({route}) => {
       !lastName ||
       !address ||
       !city ||
-      !zipCode ||
       !phone ||
       !email
     ) {

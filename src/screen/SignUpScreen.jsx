@@ -85,13 +85,13 @@ import {
           </TouchableOpacity>
           <Text style={styles.continueText}>or continue with</Text>
           {/* Google button */}
-          {/* <TouchableOpacity style={styles.googleButtonContainer}>
+          <TouchableOpacity style={styles.googleButtonContainer}>
             <Image
               source={require("../assets/google.png")}
               style={styles.googleImage}
             />
             <Text style={styles.googleText}>Google</Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
           
           {/* Footer with login link */}
           <View style={styles.footerContainer}>

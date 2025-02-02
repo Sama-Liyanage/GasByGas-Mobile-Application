@@ -7,9 +7,10 @@ import {
   Alert,
 } from 'react-native';
 import React from 'react';
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { colors } from '../utils/color';
 
 const TokenDetailsScreen = ({route, navigation}) => {
-  const navigation = useNavigation();
 
   const handleGoBack = () => {
     navigation.goBack();

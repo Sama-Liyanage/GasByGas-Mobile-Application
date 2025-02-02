@@ -32,8 +32,8 @@ const DashboardScreen = () => {
         />
 
         <DashboardCard
-          title="Order History"
-          icon="history"
+          title="Token Status"
+          icon="check-circle"
           color={colors.secondary}
           onPress={() => navigation.navigate('ORDER_HISTORY')}
         />

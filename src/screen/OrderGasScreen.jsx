@@ -27,9 +27,10 @@ const OrderGasScreen = () => {
   const [deliveryPeriod, setDeliveryPeriod] = useState('');
 
   const outlets = [
-    {id: 1, name: 'Outlet A', district: 'District 1'},
-    {id: 2, name: 'Outlet B', district: 'District 2'},
-    {id: 3, name: 'Outlet C', district: 'District 3'},
+    { id: 1, name: 'Galle Main Outlet', district: 'Galle' },
+    { id: 2, name: 'Unawatuna Gas Point', district: 'Galle' },
+    { id: 3, name: 'Hikkaduwa LP Gas Center', district: 'Galle' },
+    { id: 4, name: 'Ambalangoda Gas Depot', district: 'Galle' },
   ];
 
   const gasTypes = [
